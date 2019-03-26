@@ -1,0 +1,31 @@
+Notes
+
+To fix 403 error: 
+Note - .filter filters out the book from your "library" if it's in there, .concat is used to join arrays - in this case we're simply adding the book back on
+
+
+OLD CODE: 
+
+  changeShelf = (book) => {
+    this.setState((state) => ({
+      books: state.books.filter((b) => b.shelf !== book.shelf)
+    }))
+    BooksAPI.update(book, book.shelf)
+  }
+
+NEW CODE: 
+
+	changeShelf = (book, shelf) => {
+	    BooksAPI.update(book, shelf).then(response => {
+	      book.shelf = shelf
+	      this.setState((state) => ({
+	        books: state.books.filter((b) => b.id !== book.id).concat([ book ])
+	      }))      
+	    })
+	  }
+
+
+Next Steps:
+1. Create a <Book> component, which you use like this <Book book={book} />
+2. Next, implement each shelf by using something like {this.state.books.filter(book => book.shelf === currentlyReading').map((book) => ( in BookList.js
+
